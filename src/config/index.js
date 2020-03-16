@@ -18,6 +18,7 @@ const fontSize = {
 const colorPalette = {
   blue: '#008FD0',
   red: '#FF3030',
+  darkRed: '#900',
   white: '#FFFFFF',
   lightGrey: '#e0e0e0',
   gray: '#a0a0a0',
@@ -97,6 +98,7 @@ if (theme === 'light') {
     background: colors.lightTheme.background,
 
     // common
+    common: colors.common,
     blue: colors.common.blue,
     red: colors.common.red,
     gray: colors.common.gray,
