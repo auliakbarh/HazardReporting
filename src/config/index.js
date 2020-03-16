@@ -99,6 +99,7 @@ if (theme === 'light') {
     // common
     blue: colors.common.blue,
     red: colors.common.red,
+    gray: colors.common.gray,
   };
 
   fontColor = {
