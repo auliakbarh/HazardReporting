@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
   Alert,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import config from '../config';
 import scale from '../config/scale';
@@ -19,7 +19,7 @@ import TextInput from '../components/TextInput';
 import endpoint from '../config/endpoint';
 
 const myIcon = (
-  <Icon name="rocket" size={scale(50)} color={config.color.common.darkRed} />
+  <Icon name="hazard-lights" size={scale(50)} color={config.color.common.darkRed} />
 );
 
 const initialState = {
