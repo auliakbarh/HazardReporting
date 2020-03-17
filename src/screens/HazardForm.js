@@ -6,6 +6,8 @@ import {
   StatusBar,
   Picker,
   TouchableOpacity,
+  ActivityIndicator,
+  Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -14,19 +16,27 @@ import scale from '../config/scale';
 import {textStyles} from '../config/styles';
 
 import TextInput from '../components/TextInput';
+import endpoint from '../config/endpoint';
 
-const myIcon = <Icon name="rocket" size={scale(50)} color={config.color.common.darkRed} />;
+const myIcon = (
+  <Icon name="rocket" size={scale(50)} color={config.color.common.darkRed} />
+);
+
+const initialState = {
+  waktuLaporan: null,
+  judulHazard: '',
+  detailLaporan: '',
+  detailLokasi: '',
+  lokasi: 'Lain-lain',
+  subLokasi: 'Lain-lain',
+  isSubmitting: false,
+  isSuccess: false,
+};
 
 export default class HazardForm extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      judulHazard: '',
-      detailLaporan: '',
-      detailLokasi: '',
-      lokasi: '',
-      subLokasi: '',
-    };
+    this.state = {...initialState};
   }
 
   onChangeText_judulHazard = text => {
@@ -39,6 +49,90 @@ export default class HazardForm extends Component {
 
   onChangeText_detailLokasi = text => {
     this.setState({detailLokasi: text});
+  };
+
+  submittingData = async () => {
+    const {
+      judulHazard,
+      detailLaporan,
+      detailLokasi,
+      lokasi,
+      subLokasi,
+    } = this.state;
+
+    const data = {
+      waktuLaporan: new Date(),
+      judulHazard,
+      detailLaporan,
+      lokasi,
+      subLokasi,
+      detailLokasi,
+    };
+
+    const headers = {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    };
+
+    const url = `${config.api}${endpoint.submit}`;
+    const requestBody = {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(data),
+      timeout: 500,
+    };
+
+    const result = await fetch(url, requestBody)
+      .then(response => response.json())
+      .then(responseJson => {
+        return (
+          responseJson.status === 200 &&
+          responseJson.message === 'Success created'
+        );
+      })
+      .catch(error => {
+        console.error(error);
+        return false;
+      });
+
+    if (result) {
+      Alert.alert('Pemberitahuan', 'Data berhasil dikirim.');
+      this.setState({
+        ...initialState,
+        isSubmitting: false,
+        isSuccess: true,
+      });
+    } else {
+      Alert.alert('Pemberitahuan', 'Data gagal dikirim.');
+      this.setState({
+        isSubmitting: false,
+        isSuccess: false,
+      });
+    }
+  };
+
+  onSubmit = () => {
+    this.setState({isSubmitting: true}, () => this.submittingData());
+  };
+
+  _renderSubmitButton = () => {
+    const {isSubmitting} = this.state;
+
+    return (
+      <TouchableOpacity
+        disabled={isSubmitting}
+        style={styles.saveButton}
+        onPress={() => this.onSubmit()}>
+        {isSubmitting ? (
+          <ActivityIndicator
+            color={config.color.common.white}
+            size={config.fontSize.xlarge}
+          />
+        ) : (
+          <Text style={styles.saveButtonText}>Submit</Text>
+        )}
+      </TouchableOpacity>
+    );
   };
 
   render() {
@@ -105,9 +199,7 @@ export default class HazardForm extends Component {
             value={detailLokasi}
           />
 
-          <TouchableOpacity style={styles.saveButton}>
-            <Text style={styles.saveButtonText}>Submit</Text>
-          </TouchableOpacity>
+          {this._renderSubmitButton()}
         </View>
       </>
     );
