@@ -78,7 +78,7 @@ export default function BottomTabNavigator() {
         activeTintColor: 'white',
         inactiveTintColor: 'white',
         style: {
-          backgroundColor: config.color.red,
+          backgroundColor: config.color.common.darkRed,
         },
       }}>
       <Tab.Screen name={screenName.REPORT_TAB} component={ReportTab} />

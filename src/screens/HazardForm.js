@@ -138,15 +138,15 @@ const styles = StyleSheet.create({
     marginBottom: scale(32),
   },
   saveButton: {
-    borderRadius: scale(16),
+    // borderRadius: scale(8),
     backgroundColor: config.color.common.darkRed,
-    padding: scale(15),
+    padding: scale(12),
     margin: scale(5),
     marginTop: scale(32),
   },
   saveButtonText: {
     color: '#FFFFFF',
-    fontSize: scale(20),
+    fontSize: config.fontSize.medium,
     textAlign: 'center',
   },
 });
