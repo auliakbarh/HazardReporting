@@ -109,6 +109,7 @@ if (theme === 'light') {
     main: fontColors.lightTheme.main,
 
     // common
+    common: fontColor.common,
     forBackgroundBlue: fontColors.common.solid.white,
   };
 }
