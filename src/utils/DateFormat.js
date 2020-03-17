@@ -13,15 +13,19 @@ export const months = {
   11: 'Desember',
 };
 
-export function getDate(param) {
+export function getDate(param, fullDate = false) {
   try {
     const datetime = new Date(param);
     const date = datetime.getDate();
-    const month = months[datetime.getMonth()].slice(0, 3);
-    const year = datetime
-      .getFullYear()
-      .toString()
-      .slice(2, 4);
+    const month = fullDate
+      ? months[datetime.getMonth()]
+      : months[datetime.getMonth()].slice(0, 3);
+    const year = fullDate
+      ? datetime.getFullYear()
+      : datetime
+          .getFullYear()
+          .toString()
+          .slice(2, 4);
 
     return `${date} ${month} ${year}`;
   } catch (e) {

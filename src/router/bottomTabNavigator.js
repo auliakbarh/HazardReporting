@@ -9,7 +9,7 @@ import config from '../config';
 
 import * as screenName from './screenNames';
 import ReportTab from '../screens/HazardForm';
-import ListHazard from '../screens/ListHazard';
+import {SubmittedReportStackNavigator} from './stackNavigator';
 
 const Tab = createBottomTabNavigator();
 
@@ -82,7 +82,7 @@ export default function BottomTabNavigator() {
         },
       }}>
       <Tab.Screen name={screenName.REPORT_TAB} component={ReportTab} />
-      <Tab.Screen name={screenName.LIST_REPORT} component={ListHazard} />
+      <Tab.Screen name={screenName.LIST_REPORT} component={SubmittedReportStackNavigator} />
     </Tab.Navigator>
   );
 }

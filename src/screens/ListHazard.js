@@ -13,6 +13,7 @@ import config from '../config';
 import endpoint from '../config/endpoint';
 import scale from '../config/scale';
 import {getDate, getTime} from '../utils/DateFormat';
+import * as screenName from '../router/screenNames';
 
 export default class ListHazard extends Component {
   constructor(props) {
@@ -55,10 +56,18 @@ export default class ListHazard extends Component {
     this.refresh();
   }
 
+  goToDetail = detail => {
+    this.props.navigation.navigate(screenName.DETAIL_HAZARD_SCREEN, {
+      detail,
+    });
+  };
+
   _renderList = item => {
     try {
       return (
-        <TouchableOpacity style={styles.listHazard}>
+        <TouchableOpacity
+          onPress={() => this.goToDetail(item)}
+          style={styles.listHazard}>
           <View style={styles.iconListHazard}>
             <Icon
               name={'hazard-lights'}
@@ -88,8 +97,8 @@ export default class ListHazard extends Component {
     return (
       <>
         <StatusBar
-          barStyle="dark-content"
-          backgroundColor={config.color.background}
+          barStyle="light-content"
+          backgroundColor={config.color.common.darkRed}
         />
         <View style={styles.mainContainer}>
           <FlatList
@@ -109,7 +118,7 @@ const styles = StyleSheet.create({
   mainContainer: {
     display: 'flex',
     flex: 1,
-    padding: scale(30),
+    padding: scale(5),
     backgroundColor: config.color.background,
   },
   listHazard: {
