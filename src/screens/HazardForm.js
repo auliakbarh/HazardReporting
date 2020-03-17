@@ -15,7 +15,7 @@ import {textStyles} from '../config/styles';
 
 import TextInput from '../components/TextInput';
 
-const myIcon = <Icon name="rocket" size={30} color={config.color.common.darkRed} />;
+const myIcon = <Icon name="rocket" size={scale(50)} color={config.color.common.darkRed} />;
 
 export default class HazardForm extends Component {
   constructor(props) {
