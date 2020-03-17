@@ -12,6 +12,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import config from '../config';
 import endpoint from '../config/endpoint';
 import scale from '../config/scale';
+import {getDate, getTime} from '../utils/DateFormat';
 
 export default class ListHazard extends Component {
   constructor(props) {
@@ -70,7 +71,8 @@ export default class ListHazard extends Component {
             <Text>{`${item.lokasi} - ${item.subLokasi}`}</Text>
           </View>
           <View style={styles.timeListHazard}>
-            <Text style={styles.time}>{item.waktuLaporan}</Text>
+            <Text style={styles.time}>{getDate(item.waktuLaporan)}</Text>
+            <Text style={styles.time}>{getTime(item.waktuLaporan)}</Text>
           </View>
         </TouchableOpacity>
       );
