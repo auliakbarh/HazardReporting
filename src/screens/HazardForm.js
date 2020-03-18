@@ -19,7 +19,11 @@ import TextInput from '../components/TextInput';
 import endpoint from '../config/endpoint';
 
 const myIcon = (
-  <Icon name="hazard-lights" size={scale(50)} color={config.color.common.darkRed} />
+  <Icon
+    name="hazard-lights"
+    size={scale(50)}
+    color={config.color.common.darkRed}
+  />
 );
 
 const initialState = {
@@ -38,6 +42,16 @@ export default class HazardForm extends Component {
     super(props);
     this.state = {...initialState};
   }
+
+  db = () => {
+    let database = null;
+    try {
+      database = this.props.route.params.database;
+    } catch (e) {
+      console.log(e);
+    }
+    return database;
+  };
 
   onChangeText_judulHazard = text => {
     this.setState({judulHazard: text});
@@ -82,6 +96,68 @@ export default class HazardForm extends Component {
       timeout: 500,
     };
 
+    this.insertHazard(data);
+  };
+
+  insertHazard = async ({
+    waktuLaporan,
+    judulHazard,
+    detailLaporan,
+    lokasi,
+    subLokasi,
+  }) => {
+    const db = this.db();
+
+    const hazardsCollection = db.collections.get('hazards');
+    await db.action(async () => {
+      let newHazard = null;
+
+      function validation(data) {
+        return data !== '';
+      }
+
+      try {
+        if (
+          validation(waktuLaporan) &&
+          validation(judulHazard) &&
+          validation(detailLaporan) &&
+          validation(lokasi) &&
+          validation(subLokasi)
+        ) {
+          newHazard = await hazardsCollection.create(hazard => {
+            hazard.waktuLaporan = waktuLaporan;
+            hazard.judulHazard = judulHazard;
+            hazard.detailLaporan = detailLaporan;
+            hazard.lokasi = lokasi;
+            hazard.subLokasi = subLokasi;
+          });
+        }
+      } catch (e) {
+        console.log(e);
+      }
+
+      if (newHazard) {
+        Alert.alert('Pemberitahuan', 'Data berhasil disimpan.');
+        this.setState({
+          ...initialState,
+          isSubmitting: false,
+          isSuccess: true,
+        });
+      } else {
+        Alert.alert('Pemberitahuan', 'Data gagal disimpan.');
+        this.setState({
+          isSubmitting: false,
+          isSuccess: false,
+        });
+      }
+    });
+
+    const listHazard = await hazardsCollection.query().fetch();
+    console.log('hazardsCollection', listHazard.length);
+    console.log('hazardsCollection', listHazard[listHazard.length - 1]);
+  };
+
+  postData = async (url, requestBody) => {
     const result = await fetch(url, requestBody)
       .then(response => response.json())
       .then(responseJson => {
