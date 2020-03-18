@@ -13,7 +13,8 @@ import {SubmittedReportStackNavigator} from './stackNavigator';
 
 const Tab = createBottomTabNavigator();
 
-export default function BottomTabNavigator() {
+export default function BottomTabNavigator(props) {
+  const {database} = props;
   return (
     <Tab.Navigator
       initialRouteName={screenName.REPORT_TAB}
@@ -81,8 +82,15 @@ export default function BottomTabNavigator() {
           backgroundColor: config.color.common.darkRed,
         },
       }}>
-      <Tab.Screen name={screenName.REPORT_TAB} component={ReportTab} />
-      <Tab.Screen name={screenName.LIST_REPORT} component={SubmittedReportStackNavigator} />
+      <Tab.Screen
+        name={screenName.REPORT_TAB}
+        component={ReportTab}
+        initialParams={{database}}
+      />
+      <Tab.Screen
+        name={screenName.LIST_REPORT}
+        component={SubmittedReportStackNavigator}
+      />
     </Tab.Navigator>
   );
 }
