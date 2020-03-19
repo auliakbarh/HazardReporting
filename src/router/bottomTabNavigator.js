@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createStackNavigator} from '@react-navigation/stack';
 import {Image, Text, TouchableOpacity} from 'react-native';
 import config from '../config';
 
@@ -9,9 +10,11 @@ import config from '../config';
 
 import * as screenName from './screenNames';
 import ReportTab from '../screens/HazardForm';
-import {SubmittedReportStackNavigator} from './stackNavigator';
+import ListHazard from '../screens/ListHazard';
+import HazardDetail from '../screens/HazardDetail';
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
 export default function BottomTabNavigator(props) {
   const {database} = props;
@@ -87,10 +90,30 @@ export default function BottomTabNavigator(props) {
         component={ReportTab}
         initialParams={{database}}
       />
-      <Tab.Screen
-        name={screenName.LIST_REPORT}
-        component={SubmittedReportStackNavigator}
-      />
+      <Tab.Screen name={screenName.LIST_REPORT}>
+        {function() {
+          return (
+            <Stack.Navigator
+              initialRouteName={screenName.MY_SUBMITTED_REPORT_SCREEN}
+              headerMode={'float'}
+              screenOptions={{
+                headerTintColor: 'white',
+                headerStyle: {backgroundColor: config.color.common.darkRed},
+              }}>
+              <Stack.Screen
+                name={screenName.MY_SUBMITTED_REPORT_SCREEN}
+                component={ListHazard}
+                initialParams={{database}}
+              />
+              <Stack.Screen
+                name={screenName.DETAIL_HAZARD_SCREEN}
+                component={HazardDetail}
+                initialParams={{database}}
+              />
+            </Stack.Navigator>
+          );
+        }}
+      </Tab.Screen>
     </Tab.Navigator>
   );
 }
